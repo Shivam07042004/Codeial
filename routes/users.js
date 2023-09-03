@@ -8,5 +8,8 @@ router.get('/profile',userControllers.profile);
 router.get('/sign-up',userControllers.signUp);
 router.get('/sign-in',userControllers.signIn);
 router.post('/create',userControllers.create);
+router.post('/create-session',userControllers.createSession);
+
+router.get('/sign-out',userControllers.signOut);
 
 module.exports = router;
