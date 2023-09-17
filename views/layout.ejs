@@ -1,22 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= title %></title>
-    <link rel="stylesheet" href="/assets/css/layout.css">
-    <!-- Other stylesheet links here -->
+    <link rel="stylesheet" type="text/css" href="/css/layout.css">
+    <link rel="stylesheet" type="text/css" href="/css/header.css">
+    <link rel="stylesheet" type="text/css" href="/css/footer.css">
 </head>
 <body>
     <%- include('_header'); %>
 
-    <!-- Render actual content here -->
     
     <%- body %>
 
+
+    <!-- <div class="content-message">Codieal web</div>
+
+    <div id="content">
+        public is using this widely
+    </div> -->
+
     <%- include('_footer'); %>
 
-    <!-- Other scripts here -->
+
 </body>
 </html>
 

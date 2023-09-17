@@ -1,0 +1,38 @@
+header {
+    height: auto;
+    background-color: rgba(40, 37, 227, 0.921);
+    font-size: 30px;
+    color: white;
+    column-count: 2;
+  }
+  
+    
+  
+  #logo-name{
+    /* width: 30%; */
+    font-weight: bolder;
+  
+    color: white;
+    padding: 3px;
+  }
+  
+  #links{
+    /* width: 20%; */
+    position: absolute;
+    top: 6px;
+    right: 12px;
+    padding: 2px;
+  
+    color: white;
+    display: inline;
+  }
+  
+  #links a{
+    text-decoration: none;
+    color: white;
+    width: 20%;
+  }
+  
+  #links a:hover{
+    text-decoration: underline;
+  }

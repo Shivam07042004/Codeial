@@ -17,7 +17,9 @@
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "python": "^0.0.4",
-    "sass-middleware": "^0.0.3"
+    "sass": "^1.66.1",
+    "sass-middleware": "^0.0.3",
+    "ss": "^0.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
