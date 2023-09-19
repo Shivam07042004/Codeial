@@ -15,18 +15,25 @@ module.exports.home = function(request,response){
     //     })
 
     Post.find({})
-    .populate('user') // Change 'User' to 'user' to match your schema
-    .exec()
-    .then(posts => {
-        return response.render('home', {
-            posts: posts,
-            title: 'Codeial | Home'
-        });
-    })
-    .catch(error => {
-        console.log('error in user finding for posts', error);
-        return response.redirect('back');
+  .populate('user')
+  .populate({
+    path: 'comments',
+    populate: {
+      path: 'user'
+    }
+  })
+  .exec()
+  .then(posts => {
+    return response.render('home', {
+      posts: posts,
+      title: 'Codeial | Home'
     });
+  })
+  .catch(error => {
+    console.log('error in user finding for posts', error);
+    return response.redirect('back');
+  });
+
 
 
         

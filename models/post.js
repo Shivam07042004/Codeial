@@ -8,7 +8,13 @@ const PostSchema = new mongoose.Schema({
     user:{  // this is used to find the user who is making these post or these posts belongs to whom
         type:mongoose.Schema.Types.ObjectId,
         ref:'User'
-    }
+    },
+    // include the array of ids of all comments 
+    comments:[{
+
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Comment'
+    }]
 },{     timestamps:true // used to restore the updated time and created time in changes or posts
 });
 
