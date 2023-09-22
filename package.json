@@ -22,11 +22,13 @@
     "ss": "^0.0.1"
   },
   "devDependencies": {
+    "concurrently": "^8.2.1",
     "nodemon": "^3.0.1"
   },
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "concurrently \"npm run compile-scss\" \"nodemon index.js\"",
     "scss": "sass --watch assets/scss:assets/css",
     "compile-scss": "node-sass assets/scss -o assets/css --output-style expanded"
   }
+  
 }

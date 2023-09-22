@@ -1,28 +1,58 @@
 const User = require('../models/user');
 
-module.exports.profile = function(request, response) {
-    if (request.cookies.user_id) {
-        User.findById(request.cookies.user_id)
-            .then(user => {
-                if (user) {
-                    return response.render('user_profile', {
-                        title: 'profile',
-                        user: user
-                    });
-                } else {
-                    console.log('user not logged in and processed to sign in page')
-                    return response.redirect('/users/sign-in');
-                }
+// module.exports.profile = function(request, response) {
+//     if (request.cookies.user_id) {
+//         User.findById(request.cookies.user_id)
+//             .then(user => {
+//                 if (user) {
+//                     return response.render('user_profile', {
+//                         title: 'profile',
+//                         user: user
+//                     });
+//                 } else {
+//                     console.log('user not logged in and processed to sign in page')
+//                     return response.redirect('/users/sign-in');
+//                 }
+//             })
+//             .catch(error => {
+//                 console.log('Error fetching user:', error);
+//                 return response.redirect('/users/sign-in');
+//             });
+//     } else {
+//         console.log('user not logged in and processed to sign in page')
+//         return response.redirect('/users/sign-in');
+//     }
+// };
+
+module.exports.profile = function(request,response){
+    User.findById(request.params.id)
+        .then((user) => {
+          return response.render('user_profile',{
+            title:'User Profile',
+            profile_user: user
+          })  
+        })
+        .catch( (error) => {
+            console.log('error in the displaying profile ',error);
+        })
+
+}
+
+module.exports.update = function(request,response){
+    if(request.user.id == request.params.id){
+        User.findByIdAndUpdate(request.params.id, request.body)
+            .then( () => {
+                console.log('user data updated');
+                return response.redirect('back');
             })
-            .catch(error => {
-                console.log('Error fetching user:', error);
-                return response.redirect('/users/sign-in');
-            });
-    } else {
-        console.log('user not logged in and processed to sign in page')
-        return response.redirect('/users/sign-in');
+            .catch( (error) => {
+                console.log('error in the updating the user data');
+            })
     }
-};
+    else  {
+        return response.status(401).send('unauthorized');
+    }
+}
 
 
     

@@ -24,10 +24,18 @@ module.exports.home = function(request,response){
   })
   .exec()
   .then(posts => {
-    return response.render('home', {
-      posts: posts,
-      title: 'Codeial | Home'
-    });
+    User.find({})
+        .then( (users) => {
+          return response.render('home', {
+            posts: posts,
+            title: 'Codeial | Home',
+            all_users: users
+          });
+        })
+        .catch( (error) =>{
+          console.log('errror in finding the friends of the users',error);
+        })
+    
   })
   .catch(error => {
     console.log('error in user finding for posts', error);
