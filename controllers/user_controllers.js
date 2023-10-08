@@ -1,5 +1,8 @@
 const User = require('../models/user');
 
+const fs= require('fs');
+const path= require('path');
+
 // module.exports.profile = function(request, response) {
 //     if (request.cookies.user_id) {
 //         User.findById(request.cookies.user_id)
@@ -38,20 +41,62 @@ module.exports.profile = function(request,response){
 
 }
 
-module.exports.update = function(request,response){
+module.exports.update = async function(request,response){
+    // if(request.user.id == request.params.id){
+    //     User.findByIdAndUpdate(request.params.id, request.body)
+    //         .then( () => {
+    //             console.log('user data updated');
+    //             return response.redirect('back');
+    //         })
+    //         .catch( (error) => {
+    //             console.log('error in the updating the user data');
+    //         })
+    // }
+    // else  {
+    //     return response.status(401).send('unauthorized');
+    // }
+
     if(request.user.id == request.params.id){
-        User.findByIdAndUpdate(request.params.id, request.body)
-            .then( () => {
-                console.log('user data updated');
-                return response.redirect('back');
+        try{
+            let user= await User.findById(request.params.id);
+
+            User.uploadedAvatar(request,response,function(error){
+                if(error){
+                    console.log('multer error',error);
+                    return response.redirect('back');
+                }
+                console.log(request.file);
+                user.name= request.body.name;
+                user.email= request.body.email;
+                console.log("********* ",request.file.filename);
+                if (request.file) {
+                    if(user.avatar){
+                        fs.unlinkSync(path.join(__dirname,'..',user.avatar));
+                    }
+                    // Assuming you have already corrected the path as mentioned earlier
+                    user.avatar = '/uploads/users/avatars/' + request.file.filename;
+                    request.flash('success','new avatar uploaded')
+                } else {
+                    console.log('No new avatar uploaded'); // Handle this case as needed
+                }
+                
+                user.save();
+                        return response.redirect('back');
+                  
             })
-            .catch( (error) => {
-                console.log('error in the updating the user data');
-            })
+        
+
+        }catch(error){
+            request.flash('error',error);
+            return response.redirect('back');
+        }
+
+    }else  {
+        request.flash('error','Unauthorized');
+        return response.status(401).send('Unauthorized');
     }
-    else  {
-        return response.status(401).send('unauthorized');
-    }
+
+
 }
 
 
@@ -101,6 +146,8 @@ module.exports.signOut = function(request, response) {
             console.log('Error during logout:', err);
             return response.redirect('/'); // Redirect to some error page
         }
+
+        request.flash('success','logged out successfully!');
         
         console.log('signed out successfully');
         return response.redirect('/users/sign-in');
@@ -205,6 +252,9 @@ module.exports.createSession = function(request, response) {
 
     // Log session information
     console.log('Session:', request.session);
+
+    // display flash messages
+    request.flash('success','logged in successfully!');
 
     return response.redirect('/');
 };

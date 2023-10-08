@@ -1,7 +1,7 @@
 const Post = require('../models/post');
 const User = require('../models/user')
 
-module.exports.home = function(request,response){
+module.exports.home = async function(request,response){
 
     // Post.find({})
     //     .then( (posts) => {
@@ -14,33 +14,33 @@ module.exports.home = function(request,response){
     //         console.log('error in the displaying the posts');
     //     })
 
-    Post.find({})
-  .populate('user')
-  .populate({
-    path: 'comments',
-    populate: {
-      path: 'user'
-    }
-  })
-  .exec()
-  .then(posts => {
-    User.find({})
-        .then( (users) => {
-          return response.render('home', {
-            posts: posts,
-            title: 'Codeial | Home',
-            all_users: users
-          });
+  try
+  {
+        let posts = await  Post.find({})
+        .sort('-createdAt')
+        .populate('user')
+        .populate({
+          path: 'comments',
+          options: { sort: { createdAt: -1} }, 
+          populate: {
+            path: 'user'
+          }
         })
-        .catch( (error) =>{
-          console.log('errror in finding the friends of the users',error);
-        })
+      console.log('await works fine');
+      let users= await User.find({})
+        return response.render('home', {
+          posts: posts,
+          title: 'Codeial | Home',
+          all_users: users,
+          user: request.user // Make sure 'user' is passed here
+      });
     
-  })
-  .catch(error => {
-    console.log('error in user finding for posts', error);
-    return response.redirect('back');
-  });
+  } catch(error){
+    console.log('error in the home page loading',error);
+
+  }
+       
+  
 
 
 

@@ -1,6 +1,9 @@
 <html>
 <head>
     <title><%= title %></title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"> </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"> </script>
     <link rel="stylesheet" type="text/css" href="/css/layout.css">
     <link rel="stylesheet" type="text/css" href="/css/header.css">
     <link rel="stylesheet" type="text/css" href="/css/footer.css">
@@ -11,6 +14,7 @@
     <%- include('_header'); %>
 
     
+
     <%- body %>
 
 
@@ -20,8 +24,37 @@
         public is using this widely
     </div> -->
 
-    <%- include('_footer'); %>
+    <%- include('_footer') %>
 
+    <script>
+        <% if(locals.flash.success && locals.flash.success.length>0 ) { %>
+
+            new Noty({
+                theme : 'relax',
+                text: '<%= flash.success %>',
+                type: 'success',
+                layout: 'topRight',
+                timeout: 1500
+            }).show();
+            
+            
+        <% } %>
+
+        <% if(locals.flash.error && locals.flash.error.length>0 ) { %>
+
+            new Noty({
+                theme : 'relax',
+                text: '<%= flash.error %>',
+                type: 'error',
+                layout: 'topRight',
+                timeout: 1500
+            }).show();
+            
+            
+        <% } %>
+    </script>
+
+  
 
 </body>
 </html>

@@ -14,6 +14,11 @@ const MongoStore = require('connect-mongo');
 
 const sassMiddleware = require('sass-middleware');
 
+// connect flash
+const flash = require('connect-flash');
+const customMware = require('./config/middleware');
+
+
 console.log('before sassmiddleware configuration');
 
 app.use(
@@ -37,6 +42,8 @@ app.use(express.static(path.join(__dirname,'/assets')));
 
 
 console.log('Static files middleware configured');
+
+app.use('/uploads', express.static(__dirname + '/uploads'));
 
 app.use(expressLayouts);
 
@@ -69,6 +76,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(passport.setAuthenticatedUser);
+
+
+// use connect flash
+app.use(flash());
+app.use(customMware.setFlash);
 
 app.use('/', require('./routes'));
 

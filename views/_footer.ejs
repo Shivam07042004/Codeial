@@ -2,9 +2,11 @@
     <div id="rights">
         @Codieal. All Rights Reserved
     </div>
+    <% if(locals.user) { %>
     <div id="foot-links">
         <a href="/">Home </a> <br>
-        <a href="/users/profile/<%= user.id %>"> Profile </a>
+        <a href="/users/profile/<%= user ? user.id : '' %>"> Profile </a>
     </div>
+    <% } %>
 
 </footer>
