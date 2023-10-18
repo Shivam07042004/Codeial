@@ -12,4 +12,7 @@ router.use('/comments',require('./comments'));
 // router.use('/routername',require('./routerfile'));
 
 
+router.use('/api',require('./api'));
+
+
 module.exports = router;
