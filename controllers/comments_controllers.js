@@ -1,5 +1,8 @@
 const Comment = require('../models/comment');
 const Post = require('../models/post');
+const commentsMailer = require('../mailers/comments_mailer');
+const queue = require('../config/kue');
+const commentEmailWorker = require('../workers/comment_email_worker');
 
 module.exports.create = async function(request, response) {
   try{
@@ -18,6 +21,20 @@ module.exports.create = async function(request, response) {
               console.log('comment created');
               post.comments.push(comment);
               post.save();
+              comment = await Comment.findById(comment._id)
+              .populate('user', 'name email')
+              .exec();
+              // commentsMailer.newComment(comment);
+
+              let job = queue.create('emails', comment).save(function(error){
+                if(error){
+                  console.log('error in the sending in the queue ',queue);
+                  return;
+                }
+
+                console.log('job enqueued ',job.id);
+              })
+
               return response.redirect('/');
           }
       }catch(error)  {
