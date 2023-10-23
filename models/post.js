@@ -14,7 +14,14 @@ const PostSchema = new mongoose.Schema({
 
         type:mongoose.Schema.Types.ObjectId,
         ref:'Comment'
-    }]
+    }],
+    likes : [
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'Like',
+            require: true
+        }
+    ]
 },{     timestamps:true // used to restore the updated time and created time in changes or posts
 });
 
