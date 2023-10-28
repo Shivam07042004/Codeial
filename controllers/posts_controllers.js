@@ -7,40 +7,60 @@ module.exports.create = async function (request, response) {
       content: request.body.content,
       user: request.user._id,
     });
-
+    const populatedPost = await Post.findById(post._id)
+    .populate('user', 'name')
+    .exec();
     // Flash message (if session and flash middleware are properly configured)
-    request.flash('success', 'Post published');
-    console.log('post is created');
-    
-    return response.redirect('back');
+   
+    if (request.xhr) {
+      return response.status(200).json({
+          data: {
+              post: populatedPost,
+          },
+          message: 'Post created!',
+      });
+  }
+
+  request.flash('success', 'Post published!');
+  return response.redirect('back');
   } catch (error) {
     console.error('Error in creating the post', error);
     // Handle the error and send an appropriate response to the client if needed
+    return response.json({
+      success: false,
+      message: 'Error creating the post',
+    });
   }
 };
 
 module.exports.destroy = async function (request, response) {
   try {
-    console.log('ID to be deleted', request.params.id);
-    const post = await Post.findById(request.params.id);
-    if (post) {
+      let post = await Post.findById(request.params.id);
       if (post.user == request.user.id) {
         await Post.deleteOne({ _id: post._id });
-        console.log('Post deleted');
-
         await Comment.deleteMany({ post: request.params.id });
-        console.log('Comments of post are deleted');
 
-        return response.redirect('back');
+          if (request.xhr) {
+              return response.status(200).json({
+                  data: {
+                      post_id: request.params.id
+                  },
+                  message: 'Post deleted'
+              });
+          }
+
+          // Remove the redirection
+          // return response.redirect('back');
+      } else {
+          return response.redirect('back');
       }
-    }
-    console.log('You cannot delete this post');
-    return response.redirect('back');
-  } catch (error) {
-    console.error('Error in deleting the post', error);
-    // Handle the error and send an appropriate response to the client if needed
+  } catch (err) {
+      request.flash('error', err);
+      return response.redirect('back');
   }
 };
+
+
 
 
 // console.log('id need to be deleted ',request.params.id);

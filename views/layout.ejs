@@ -1,4 +1,4 @@
-<html>
+<!DOCTYPE html>
 <head>
     <title><%= title %></title>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css">
@@ -26,7 +26,6 @@
 
     <%- include('_footer') %>
 
-    <script>
         <% if(locals.flash.success && locals.flash.success.length>0 ) { %>
 
             new Noty({
@@ -52,10 +51,9 @@
             
             
         <% } %>
-    </script>
 
   
-
+        <script src="/js/home_posts.js"></script>
 </body>
 </html>
 

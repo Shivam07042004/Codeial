@@ -42,8 +42,12 @@ console.log('After middleware configuration');
 app.use(express.urlencoded({extended:false}));
 app.use(cookieParser());
 
-app.use(express.static(path.join(__dirname,'/assets')));
-
+app.use(express.static(path.join(__dirname,"/assets")));
+app.use('./css',express.static(path.resolve(__dirname,"assets/css")));
+//css/style.css
+app.use('/img',express.static(path.resolve(__dirname,"assets/img")));
+app.use('/js',express.static(path.resolve(__dirname,"assets/js")));
+app.use(express.static("assets"));
 
 console.log('Static files middleware configured');
 
